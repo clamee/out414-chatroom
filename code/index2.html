@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>414 聊天室</title>
+
+    <style>
+        #user-list li {
+            
+            font-size: 2px;
+            list-style: disc;  
+            text-indent: 0px;
+        }
+        #videos li {
+            color: white;
+            font-size: 15px;
+            list-style: decimal;
+            text-indent: 10px;
+            margin-bottom: 0;
+            margin-right: 50px;
+        }
+        * { margin: 0; padding:0; box-sizing: border-box; }
+        body { font: 20px Helvetica, Arial;
+                /*background: url('https://gimg2.baidu.com/image_search/src=http%3A%2F%2F5b0988e595225.cdn.sohucs.com%2Fimages%2F20170709%2Fc08b7f99653d4cd59f939855c76b2e69.gif&refer=http%3A%2F%2F5b0988e595225.cdn.sohucs.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1611509042&t=7107b055a7a34d057c4ec032b3667d05');
+
+                /* background-repeat:no-repeat; */
+
+                /*background: url('https://tse1-mm.cn.bing.net/th/id/R-C.48c4487ee2d5b55d174028be05358a4e?rik=gvwJTHH8OxJ73Q&riu=http%3a%2f%2fi1.hdslb.com%2fbfs%2farchive%2favsas_i181112ws3e8inli33ukgs2vnk5h5v44_0021.jpg&ehk=dqpXrrIM9KcJcFacDVgdftYorfs12%2bSWUEmP6G3nGRw%3d&risl=&pid=ImgRaw&r=0');*/
+                background: url('https://cdn.luogu.com.cn/upload/image_hosting/1b0y26fw.png');
+                width:100%;
+	min-height: 750px;
+	display: block;
+	background-size: cover;
+            }
+        form { background:#3a3a3abf; padding: 1px; position: fixed;bottom: 1%; width: 45%; }
+        form input { border: 0; padding: 10px; width: 90%; margin-right: .5%; }
+        form button { width: 9%; background:paleturquoise; border: none; padding-top: 10px;padding-bottom: 10px;padding-left: 10px;padding-right: 10px; }
+        #messages { list-style-type: none; margin: 2px; padding: 5px; }
+        #messages li { padding: 5px 10px; }
+        #messages li:nth-child(odd) { background: #cfbef698; }
+        #messages li:nth-child(even) { background:#9fbafabc;}
+    </style>
+    <style type="text/css">
+        @font-face {
+            font-family: 'Audiowide-Regular';
+            src:url(./Audiowide-Regular.ttf) format('truetype');
+    }    
+    body{
+	    font-family: 'Audiowide-Regular';	
+}
+        .font{
+            font-family: 'Audiowide-Regular';
+            font-size: 30px;
+            text-shadow: 5px 5px 5px paleturquoise, 0px 0px 2px black;
+            color: white;
+        }
+        .font2{
+            font-family: Arial, Helvetica;
+            font-size: 14px;
+            text-shadow: 2px 2px 2px black, 0px 0px 2px black
+            
+        }
+
+        .rgba{
+            background-color: rgba(39, 39, 39, 0.192);
+}
+        .invert {
+        -webkit-filter: invert(1);
+        filter: invert(1);
+        }
+        .grayscale {
+        -webkit-filter: grayscale(1);
+        filter: grayscale(1);
+        }
+
+        .shadow{
+        -webkit-filter:drop-shadow(10px 10px 10px #000);
+        filter: drop-shadow(10px 10px 10px #000);
+        }
+        .bright{
+        -webkit-filter: brightness(0.5);
+        filter: brightness(0.5);
+        }
+        .opacity{
+        -webkit-filter: opacity(0.5);
+        filter:opacity(0.5);
+        }
+        .tm-search-form-container {
+    border-radius: 15px;
+    border: 4px solid white;
+    background-color: #b35e6c;
+    margin-top: -54px;
+    -webkit-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    -moz-box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+    box-shadow: 0px 0px 5px 0px rgba(0,0,0,0.75);
+
+
+    
+}
+  
+    </style>
+</head>
+
+<body>
+    <div id="container" style="width: 100%;height: 100%;padding:40px" >
+        <div id="title" class="font" align="left" style="width: 100%;height: 15%;margin-left: 5%;margin-bottom: 10px;">
+            <h1>414 CHATROOM</h1>
+        </div>
+        <!--最上面一排选项-->
+        <div style="width: 100%;height: 15%;float: right;margin-bottom: 10px;">
+            <canvas id="capture-canvas" style="display: none;"></canvas>
+            <button onclick="changeFilter()" style="margin-left: 5%;">滤镜</button>
+            <button id="msg-remove">聊天清空</button><!--
+            <input align="center" type="text" id="filters-change" disabled="disabled" style="width: 80px;height: 25px;text-align: center;"></input>
+            <button id="change-forward">向前选择</button>
+            <button id="change-back" >向后选择</button>
+            <button id="capture">拍照</button>
+            <button id="save">保存</button>
+            <button id="remove">清除</button>
+            <input align="center" type="text" id="capture-change" disabled="disabled" style="width: 255px;height: 25px;text-align: center;"></input>
+            <ul id="capture-list"></ul>
+        </div>
+-->
+        <!--视频-->
+        <div align="center" style="width: 55%;height: 100%;float: right;">
+                    <ul id="videos">
+                        <li class="videos-li" style="float: right;">
+                            <span id="user-id-video" style="margin-bottom:0;">用户名称</span><br>
+                            
+                            <video id="video-local" class="remote-video" controls autoplay></video>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        <!--上聊天框-->
+        <div align="center" style="width: 45%;height: 100%;margin-left: 5%;float: left;">
+            <div style="width: 100%;height: 30%;">
+                <h6 id="user-id" style="margin-bottom:0;color: aliceblues;">用户名称</h6>
+                <ul id="user-list" style="margin-top: 0;"></ul>
+            </div>
+            
+            <div class="rgba" style="width: 100%;height: 70%;">
+                <ul id="messages"></ul>
+                <form action="">
+                <input id="m" autocomplete="off" /><button>Send</button>
+                </form>
+                
+            </div>
+            
+        </div>
+        
+        
+
+    <script src="//cdn.bootcdn.net/ajax/libs/socket.io/3.0.4/socket.io.js"></script>
+    <script src="//cdn.bootcdn.net/ajax/libs/jquery/3.4.1/jquery.js"></script>
+    <script>
+        // 封装一部分函数
+        function getUserMedia(constrains, success, error) {
+                if (navigator.mediaDevices.getUserMedia) {
+                    //最新标准API
+                    promise = navigator.mediaDevices.getUserMedia(constrains).then(success).
+                    catch(error);
+                } else if (navigator.webkitGetUserMedia) {
+                    //webkit内核浏览器
+                    promise = navigator.webkitGetUserMedia(constrains).then(success).
+                    catch(error);
+                } else if (navigator.mozGetUserMedia) {
+                    //Firefox浏览器
+                    promise = navagator.mozGetUserMedia(constrains).then(success).
+                    catch(error);
+                } else if (navigator.getUserMedia) {
+                    //旧版API
+                    promise = navigator.getUserMedia(constrains).then(success).
+                    catch(error);
+                }
+        }
+        function canGetUserMediaUse() {
+            return !! (navigator.mediaDevices.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia);
+        }
+
+        // 加滤镜函数
+        var filters = ['', 'grayscale', 'sepia', 'invert','bright','shadow','opacity'], currentFilter = 0;
+        function changeFilter() {
+            currentFilter++;
+            if (currentFilter > filters.length - 1) currentFilter = 0;
+            videos.className = filters[currentFilter];
+            $('#filters-change').val(filters[currentFilter]);
+        }
+
+        const localVidElem = document.getElementById("video-local");
+
+        $('document').ready(() => {
+            // console.log(document.getElementsByClassName('videos-li').length);
+            let videos_li = document.getElementsByClassName('remote-video');
+            // console.log(videos_li.length);
+            let video = null;
+            let count = 0;
+            $('#change-back').click(() => {
+                if(count<videos_li.length){
+                    video = videos_li[count];
+                    count = count+1;
+                    // $('#capture-change').text(video.id);
+                    $('#capture-change').val(video.id);
+                }else{};
+            })
+            $('#change-forward').click(() => {
+                if(count>0){
+                    count = count-1;
+                    video = videos_li[count];
+                    // $('#capture-change').text(video.id);
+                    $('#capture-change').val(video.id);
+                }
+            })
+            $('#save').click(() => {
+                // let image = new Image();
+                // let image_list = document.getElementsByClassName('image-list');
+                // console.log(image_list.length);
+                // image = image_list[0];
+                // var url = image.replace(/^data:image\/[^;]/, 'data:application/octet-stream');
+                // window.open(url);
+            })
+            $('#remove').click(() => {
+                $('#capture-list').children().remove();
+                $('#capture-change').val('');
+                count = 0;
+            });
+            $('#msg-remove').click(() => {
+                $('#messages').children().remove();
+            });
+            $('#capture').click(() => {
+                // let video = localVidElem//原生dom
+                let isPlaying = !(video.paused || video.ended || video.seeking || video.readyState < video.HAVE_FUTURE_DATA)
+
+                if (isPlaying) {
+                    let canvas = $('#capture-canvas');
+                    canvas.attr('width', video.clientWidth/2);//设置canvas的宽度
+                    canvas.attr('height', video.clientHeight/2);//设置canvas的高度
+
+                    let img = $('<img>');
+                    img.attr('width', video.clientWidth/2);//设置图像的宽度
+                    img.attr('height', video.clientHeight/2);//设置图像的高度
+
+                    //canvas[0] //jQuery对象转dom
+                    var context = canvas[0].getContext('2d');
+                    //在canvas上绘图，其绘图坐标为0,0;
+                    //绘图大小为摄像头内容的宽度，高度（全局绘制，你可以改变这些值试试效果）。
+                    context.drawImage(video, 0, 0, video.clientWidth/2,video.clientHeight/2);
+                    //根据canvas内容进行编码，并赋值到图片上
+                    var data = canvas[0].toDataURL('image/png');
+                    img.attr('src', data);
+                    //插入到id为capture-list的有序列表里
+                    $('#capture-list').append($('<li class="image-list" style="float: left;margin-right:2px;margin-top:3px;"></li>').html(img));
+                }
+            });
+        });
+
+
+        // stun、goole服务器配置参数
+        const iceServer={
+            "iceServers":[{
+                "url": "stun:stun.l.google.com:19302"
+            }]
+        };
+
+        // PeerConnection
+        var pc = [];
+        var localStream = null;
+
+        function InitCamera() {
+            if (canGetUserMediaUse()) {
+                getUserMedia({
+                    video: true,
+                    audio: false
+                },function(stream) {
+                    localStream = stream;
+                    localVidElem.srcObject = stream;
+                    $(localVidElem).width(180).height(160);
+                },
+                function(error) {
+                    console.log("访问用户媒体设备失败：", error.name, error.message);
+                })
+            } else {
+                alert('您的浏览器不兼容');
+            }
+        }
+
+        function StartCall(partnerName, createOffer) {
+            pc[partnerName] = new RTCPeerConnection(iceServer);
+            //如果已经有本地流，那么直接获取Tracks并调用addTrack添加到RTC对象中
+            if (localStream) {
+                localStream.getTracks().forEach((track) => {
+                    pc[partnerName].addTrack(track,localStream);
+                });
+            } else {
+                InitCamera();
+            }
+
+            //如果是呼叫方,那么需要createOffer请求
+            if (createOffer) {
+                //每当WebRTC基础结构需要你重新启动会话协商过程时，都会调用此函数。它的工作是创建和发送一个请求，给被叫方，要求它与我们联系
+                pc[partnerName].onnegotiationneeded = () => {
+                    pc[partnerName].createOffer().then((offer) => {
+                        return pc[partnerName].setLocalDescription(offer);
+                    }).then(() => {
+                        //把发起者的描述信息通过Signal Server发送到接收者
+                        socket.emit('sdp', {
+                            type: 'video-offer',
+                            description: pc[partnerName].localDescription,
+                            to: partnerName,
+                            sender: socket.id
+                        });
+                    })
+                };
+            }
+
+            //当需要你通过信令服务器将一个ICE候选发送给另一个对等端时，本地ICE层将会调用你的icecandidate 事件处理程序。
+            pc[partnerName].onicecandidate = ({ candidate }) => {
+                socket.emit('ice candidates', {
+                    candidate: candidate,
+                    to: partnerName,
+                    sender: socket.id
+                });                
+            };
+
+            //当向连接中添加磁道时，track 事件的此处理程序由本地WebRTC层调用。例如，可以将传入媒体连接到元素以显示它。
+            pc[partnerName].ontrack = (ev) => {
+                let str = ev.streams[0];
+                if(document.getElementById(`${partnerName}-video`)) {
+                    document.getElementById(`${partnerName}-video`).srcObject = str;
+                } else {
+                    let li = $('<li style="float: left;"><span style="margin-bottom:0;">'+`${partnerName}`+'</span><br/></li>').attr('id', `${partnerName}`).attr('class','videos-li');
+                    $('#videos').append(li);
+                    let newVideo = document.createElement('video');
+                    newVideo.id = `${partnerName}-video`;
+                    newVideo.autoplay = true;
+                    newVideo.controls = true;
+                    newVideo.width = 180;
+                    newVideo.height = 160;
+                    newVideo.className = 'remote-video';
+                    newVideo.srcObject = str;
+                    document.getElementById(`${partnerName}`).appendChild(newVideo);
+                }
+            }
+        }
+
+        var socket = io();
+
+        // 对话框实现
+        $(document).ready(function(){
+
+
+            //监听form的提交操作
+            $('form').submit(function(e) {
+                //禁止页面重新加载
+                e.preventDefault(); //prevents page reloading
+                //发送事件，其值为文本框中输入的值
+                socket.emit('chat message', $('#m').val());
+                //清空文本框的值
+                $('#m').val('');
+                //返回false 禁止原始的提交
+                return false;
+            });
+            
+            //监听 chat message事件，当监听到事件发生时执行第二个参数中的匿名函数
+            socket.on('chat message1', function(msg){
+                //在网页中id为messages的对象中，插入li标签，其内容为msg
+                $('#messages').append($('<li>').text(msg));
+            });
+        });
+
+        socket.on('connect', () => {
+            InitCamera();
+            //输出内容 其中 socket.id 是当前socket连接的唯一ID
+            console.log('connect-< ' + socket.id + ' >');
+            $('#user-id').text(socket.id);
+            $('#user-id-video').text(socket.id);
+            pc.push(socket.id);
+            socket.emit('new user greet', {
+                sender: socket.id,
+                msg: 'hello world'
+            });
+
+            socket.on('need connect', (data) => {
+                console.log(data);
+                //创建新的li并添加到用户列表中
+                let li = $('<li></li>').text(data.sender).attr('user-id', data.sender);
+                $('#user-list').append(li);
+                //同时创建一个按钮
+                // let button = $('<button class="call"></button>');
+                let button = $('<input type="button" align="center" style="margin-left:5px;font-size:10px;padding-top:2px;padding-bottom:2px;padding-left:5px;padding-right:5px" value="连线"/>')
+                button.id = data.sender;
+                button.appendTo(li);
+                //监听按钮的点击事件, 这是个demo 需要添加很多东西，比如不能重复拨打已经连接的用户
+                $(button).click(function () {
+                    console.log($(this).parent().attr('user-id'));
+                    console.log(document.getElementsByClassName('call').length);
+                    let callArray = document.getElementsByClassName('call');
+                    // callArray[callArray.length-1].disabled = true;
+                    StartCall($(this).parent().attr('user-id'), true);
+                });
+
+                socket.emit('ok we connect', { receiver: data.sender, sender: socket.id });
+            });
+
+            //某个用户失去连接时，我们需要获取到这个信息
+            socket.on('user disconnected', (socket_id) => {
+                console.log('disconnect : ' + socket_id);
+                $('#videos li[id="'+socket_id+'"]').remove();
+                $('#user-list li[user-id="' + socket_id + '"]').remove();
+            });
+
+            //链接吧..
+            socket.on('ok we connect', (data) => {
+                console.log(data);
+                console.log("可以通话啦");
+                // $('#user-list').append($('<li></li>').text(data.sender).attr('user-id', data.sender));
+                //这里少了程序，比如之前的按钮啊，按钮的点击监听都没有。
+                //创建新的li并添加到用户列表中
+                let li = $('<li></li>').text(data.sender).attr('user-id', data.sender);
+                $('#user-list').append(li);
+                //同时创建一个按钮
+                // let button = $('<button class="call">连线</button>');
+                let button = $('<input type="button" align="center" style="margin-left:5px;font-size:10px;padding-top:2px;padding-bottom:2px;padding-left:5px;padding-right:5px" value="连线"/>')
+                button.id = data.sender;
+                button.appendTo(li);
+                //监听按钮的点击事件, 这是个demo 需要添加很多东西，比如不能重复拨打已经连接的用户
+                $(button).click(function () {
+                    console.log($(this).parent().attr('user-id'));
+                    console.log(document.getElementsByClassName('call').length);
+                    let callArray = document.getElementsByClassName('call');
+                    // callArray[callArray.length-1].disabled = true;
+                    StartCall($(this).parent().attr('user-id'), true);
+                });
+             });
+            
+            //监听发送的sdp事件
+            socket.on('sdp', (data) => {
+                //如果时offer类型的sdp
+                if (data.description.type === 'offer') {
+                    //那么被呼叫者需要开启RTC的一套流程，同时不需要createOffer，所以第二个参数为false
+                    StartCall(data.sender, false);
+                    //把发送者(offer)的描述，存储在接收者的remoteDesc中。
+                    let desc = new RTCSessionDescription(data.description);
+                    //按1-13流程走的
+                    pc[data.sender].setRemoteDescription(desc).then(() => {
+                        pc[data.sender].createAnswer().then((answer) => {
+                            return pc[data.sender].setLocalDescription(answer);
+                        }).then(() => {
+                            socket.emit('sdp', {
+                                type: 'video-answer',
+                                description: pc[data.sender].localDescription,
+                                to: data.sender,
+                                sender: socket.id
+                            });
+                        }).catch();//catch error function empty
+                    })
+                } else if (data.description.type === 'answer') {
+                    //如果使应答类消息（那么接收到这个事件的是呼叫者）
+                    let desc = new RTCSessionDescription(data.description);
+                    pc[data.sender].setRemoteDescription(desc);
+                }
+            });
+
+            //如果是ice candidates的协商信息
+            socket.on('ice candidates', (data) => {
+                console.log('ice candidate: ' + data.candidate);
+                //{ candidate: candidate, to: partnerName, sender: socketID }
+                //如果ice candidate非空（当candidate为空时，那么本次协商流程到此结束了）
+                if (data.candidate) {
+                    var candidate = new RTCIceCandidate(data.candidate);
+                    //讲对方发来的协商信息保存
+                    pc[data.sender].addIceCandidate(candidate).catch();//catch err functionempty
+                }
+            });
+
+        });
+
+
+    </script>
+</body>
+
+</html>
